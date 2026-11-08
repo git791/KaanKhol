@@ -11,8 +11,8 @@ Built for the **Gnani.ai Great Indian AI Internship Challenge** (Target: Nov 9, 
 - **Primary Award Track:** **Jugaad Genius** (turning platform acoustic repetition into an error-correcting code)
 - **Supporting Tracks:** **Noise Canceller** (fact recovery under severe SNR and 8 kHz telephony), **Real Deal** (real timetable data, usable now)
 - **Team Members:**
-  - **Bibi Sufiya Shariff** — Product lead, speech pipeline, Gnani Prisma STT integration, fusion voting logic, noise benchmark corpus
-  - **Mohammed Ayaan Adil Ahmed** — Frontend engineering, 60 FPS acoustic hero, motion systems, edge API proxy, Gnani Timbre TTS integration, Cloudflare D1 leaderboard
+  - **Bibi Sufiya Shariff**
+  - **Mohammed Ayaan Adil Ahmed**
 
 ---
 
@@ -360,12 +360,10 @@ Open **`http://localhost:5173`** in your browser.
 
 ---
 
-## 12. Team & Contributions
+## 12. Team
 
-| Member | Role | Key Contributions |
-|---|---|---|
-| **Bibi Sufiya Shariff** | Product, Speech Pipeline, Benchmark | Gnani Prisma STT integration, trilingual fusion voting algorithm, timetable verification rules, synthetic noise benchmark corpus |
-| **Mohammed Ayaan Adil Ahmed** | Frontend, 3D Hero, Edge Architecture | 60 FPS acoustic hero canvas, departure-board UI, Cloudflare Worker proxy, Gnani Timbre TTS integration, D1 leaderboard |
+- **Bibi Sufiya Shariff**
+- **Mohammed Ayaan Adil Ahmed**
 
 ---
 
