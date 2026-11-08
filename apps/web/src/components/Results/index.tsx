@@ -83,22 +83,39 @@ export default function Results({ state, onReset }: Props) {
       </div>
 
       {/* Transcript lanes */}
-      {lanes.filter((l) => l.transcript).length > 0 && (
-        <div className="mb-6 space-y-2">
-          {lanes.filter((l) => l.transcript).map((lane) => (
-            <div
-              key={lane.lang}
-              className="p-3 rounded-xl text-sm"
-              style={{ background: 'var(--color-night-800)', border: '1px solid var(--color-night-700)' }}
-            >
-              <span className="font-mono text-xs mr-3" style={{ color: 'var(--color-steel-400)' }}>{lane.lang}</span>
-              <span lang={lane.lang.split('-')[0]} className="text-indic" style={{ color: 'var(--color-chalk-100)' }}>
-                {lane.transcript}
+      <div className="mb-6 space-y-2">
+        {lanes.map((lane) => (
+          <div
+            key={lane.lang}
+            className="p-3 rounded-xl text-sm flex items-center justify-between"
+            style={{ background: 'var(--color-night-800)', border: '1px solid var(--color-night-700)' }}
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <span
+                className="font-mono text-xs px-2 py-0.5 rounded"
+                style={{ background: 'var(--color-night-900)', border: '1px solid var(--color-night-700)', color: 'var(--color-steel-400)' }}
+              >
+                {lane.lang}
+              </span>
+              <span
+                lang={lane.lang.split('-')[0]}
+                className="text-indic truncate"
+                style={{ color: lane.transcript ? 'var(--color-chalk-100)' : 'var(--color-steel-400)', fontStyle: lane.transcript ? 'normal' : 'italic' }}
+              >
+                {lane.transcript || (lane.status === 'failed' ? (lane.error ?? 'No speech detected') : 'No speech detected in this pass')}
               </span>
             </div>
-          ))}
-        </div>
-      )}
+            <span
+              className="text-xs shrink-0 ml-3"
+              style={{
+                color: lane.transcript ? 'var(--color-go-400)' : 'var(--color-steel-400)',
+              }}
+            >
+              {lane.transcript ? 'Captured' : 'Silent / No match'}
+            </span>
+          </div>
+        ))}
+      </div>
 
       {/* Passes decoded notice */}
       {result.passesDecoded < 3 && (
