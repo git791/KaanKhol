@@ -1,0 +1,143 @@
+/* ==========================================================================
+   KaanKhol — Tailwind v4 Theme (CSS-first)
+   Night Platform palette from docs/DESIGN.md
+   ========================================================================== */
+
+@import "tailwindcss";
+
+@theme {
+  /* ── Night Platform Palette ─────────────────────────── */
+  --color-night-950: #08141F;
+  --color-night-900: #0C1D2D;
+  --color-night-800: #12293E;
+  --color-night-700: #1B3A55;
+  --color-steel-400: #6F8CA6;
+  --color-chalk-100: #F2E8D5;
+  --color-lamp-400: #FFB62E;
+  --color-lamp-600: #E08A00;
+  --color-go-400:   #3DDC97;
+  --color-stop-400: #FF5C5C;
+  --color-wave-400: #35C4D8;
+  --color-diya-400: #FF8A3D;
+
+  /* ── Typography ─────────────────────────────────────── */
+  --font-display: "Clash Display", system-ui, sans-serif;
+  --font-body:    "Satoshi", system-ui, sans-serif;
+  --font-deva:    "Noto Sans Devanagari", "Noto Sans Kannada", "Hind", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  /* ── Spacing scale (4-base) ─────────────────────────── */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+
+  /* ── Border radius ──────────────────────────────────── */
+  --radius-card: 16px;
+  --radius-chip: 999px;
+  --radius-btn:  12px;
+}
+
+/* ── Base styles ────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Night Platform background — no white, no black */
+body {
+  background: radial-gradient(
+    120% 80% at 50% 0%,
+    var(--color-night-800),
+    var(--color-night-900) 55%,
+    var(--color-night-950)
+  );
+  color: var(--color-chalk-100);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Fonts (self-hosted) ────────────────────────────────── */
+@font-face {
+  font-family: "Clash Display";
+  src: url("/fonts/ClashDisplay-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* ── Devanagari / Indic text rules ──────────────────────── */
+[lang="hi"], [lang="kn"], .text-indic {
+  font-family: var(--font-deva);
+  line-height: 1.65;      /* matras need extra room */
+  letter-spacing: 0;      /* never letter-space Indic */
+}
+
+/* ── SVG grain overlay (4% opacity, reduced-motion safe) ── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay { display: none; }
+}
+
+/* ── Focus ring (lamp-400 amber) ────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-lamp-400);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Scrollbar (subtle, Night Platform) ─────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-night-950); }
+::-webkit-scrollbar-thumb { background: var(--color-night-700); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-steel-400); }
+
+/* ── Utility: status chip colours ──────────────────────── */
+.chip-verified   { color: var(--color-go-400);   border-color: var(--color-go-400); background: rgba(61, 220, 151, 0.08); }
+.chip-conflict   { color: var(--color-stop-400); border-color: var(--color-stop-400); background: rgba(255, 92, 92, 0.08); }
+.chip-unverified { color: var(--color-steel-400); border-color: var(--color-steel-400); border-style: dashed; }
+
+/* ── Departure Board & Chip Animations (from DESIGN.md §6) ── */
+@keyframes chipStamp {
+  0% { transform: scale(0.8); opacity: 0; filter: brightness(1.5); }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+}
+
+.chip-stamp {
+  animation: chipStamp 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes flapFlip {
+  0% { transform: perspective(400px) rotateX(-75deg); opacity: 0; }
+  100% { transform: perspective(400px) rotateX(0deg); opacity: 1; }
+}
+
+.flap-cell {
+  display: inline-block;
+  transform-origin: 50% 0%;
+  animation: flapFlip 0.4s ease-out forwards;
+}
+
+/* ── Smooth scroll: Lenis sets this via JS; fallback ────── */
+html.lenis { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }

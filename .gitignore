@@ -1,0 +1,156 @@
+# =============================================================================
+# KaanKhol — .gitignore
+# =============================================================================
+
+
+# ─── SECRETS (NEVER COMMIT) ──────────────────────────────────────────────────
+# Cloudflare Worker local secrets (equivalent of .env for wrangler dev)
+.dev.vars
+apps/edge/.dev.vars
+
+# Vite / Node frontend env files
+.env
+.env.local
+.env.*.local
+apps/web/.env
+apps/web/.env.local
+apps/web/.env.*.local
+
+# Wrangler state (may contain account info)
+.wrangler/
+
+
+# ─── DOCS (all except README.md) ─────────────────────────────────────────────
+# Steering documents are intentionally excluded from git history
+# so that only README.md ships in the public repo.
+AGENTS.md
+ASSETS.md
+DESIGN.md
+PRD.md
+SUBMISSION.md
+TECHNICAL.md
+USER_WORKFLOW.md
+docs/
+
+
+# ─── DEPENDENCIES ────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+
+# ─── BUILD OUTPUTS ───────────────────────────────────────────────────────────
+dist/
+build/
+out/
+apps/web/dist/
+apps/edge/dist/
+.output/
+.next/
+.nuxt/
+.svelte-kit/
+
+
+# ─── VITE ────────────────────────────────────────────────────────────────────
+*.local
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+
+# ─── TYPESCRIPT ──────────────────────────────────────────────────────────────
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+
+# ─── TEST & COVERAGE ─────────────────────────────────────────────────────────
+coverage/
+.vitest-cache/
+test-results/
+playwright-report/
+blob-report/
+
+
+# ─── BENCH — raw audio (never commit audio) ──────────────────────────────────
+*.wav
+bench/noise/*.wav
+bench/noise/*.mp3
+bench/noise/*.ogg
+bench/noise/*.flac
+bench/synth/*.wav
+bench/synth/*.mp3
+# Keep: bench/results/benchmark.json  (pre-computed, committed intentionally)
+# Keep: bench/NOISE_SOURCES.md        (licence attributions)
+# Keep: bench/scripts/               (Python scripts)
+
+
+# ─── 3D ASSETS — large binary source files ───────────────────────────────────
+# Raw downloaded assets before optimisation go here (do not commit)
+assets/raw/
+data/_datameet/
+
+# Keep the trimmed JSON in data/ — those ARE committed
+!data/trains.json
+!data/stations.json
+
+
+# ─── OS / EDITOR ─────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+# ─── LOGS ────────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+logs/
+
+
+# ─── PYTHON (benchmark scripts) ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+
+# ─── MISC ────────────────────────────────────────────────────────────────────
+*.bak
+*.tmp
+*.temp
+.cache/
+tmp/
+temp/

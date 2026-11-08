@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-11-08T08:00:00Z",
+  "methodology": "30 synthetic trilingual announcements (kn-IN, hi-IN, en-IN) synthesized with Gnani Timbre v2.5, mixed with authentic CC0 Indian platform noise at calibrated SNRs, and passed through Gnani Prisma v2.5 STT before multi-pass voting and timetable verification.",
+  "rows": [
+    {
+      "snr_db": 20,
+      "single_best": 86.7,
+      "fused": 96.7,
+      "sample_count": 30
+    },
+    {
+      "snr_db": 10,
+      "single_best": 73.3,
+      "fused": 90.0,
+      "sample_count": 30
+    },
+    {
+      "snr_db": 5,
+      "single_best": 56.7,
+      "fused": 80.0,
+      "sample_count": 30
+    },
+    {
+      "snr_db": 0,
+      "single_best": 36.7,
+      "fused": 63.3,
+      "sample_count": 30
+    },
+    {
+      "snr_db": "telephony",
+      "single_best": 46.7,
+      "fused": 73.3,
+      "sample_count": 30
+    }
+  ]
+}

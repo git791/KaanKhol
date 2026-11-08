@@ -1,0 +1,17 @@
+{
+  "name": "kaankhol",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:web": "pnpm --filter @kaankhol/web dev",
+    "dev:edge": "pnpm --filter @kaankhol/edge dev",
+    "build": "pnpm --filter @kaankhol/core build && pnpm --filter @kaankhol/web build",
+    "test": "pnpm --filter @kaankhol/core test",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

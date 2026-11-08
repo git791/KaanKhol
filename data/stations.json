@@ -1,0 +1,22 @@
+[
+  { "code": "SBC", "name": "KSR Bengaluru", "lat": 12.9784, "lon": 77.5696 },
+  { "code": "NDLS", "name": "New Delhi", "lat": 28.6424, "lon": 77.2215 },
+  { "code": "MAS", "name": "MGR Chennai Central", "lat": 13.0825, "lon": 80.2755 },
+  { "code": "CSTM", "name": "Mumbai CSMT", "lat": 18.9402, "lon": 72.8356 },
+  { "code": "BCT", "name": "Mumbai Central", "lat": 18.9696, "lon": 72.8194 },
+  { "code": "HWH", "name": "Howrah Junction", "lat": 22.5839, "lon": 88.3426 },
+  { "code": "HYB", "name": "Hyderabad Deccan", "lat": 17.3924, "lon": 78.4678 },
+  { "code": "SC", "name": "Secunderabad", "lat": 17.4334, "lon": 78.5042 },
+  { "code": "PUNE", "name": "Pune Junction", "lat": 18.5284, "lon": 73.8744 },
+  { "code": "ADI", "name": "Ahmedabad", "lat": 23.0232, "lon": 72.6006 },
+  { "code": "CNB", "name": "Kanpur Central", "lat": 26.4539, "lon": 80.3512 },
+  { "code": "PRYJ", "name": "Prayagraj Junction", "lat": 25.4439, "lon": 81.8258 },
+  { "code": "BSB", "name": "Varanasi Junction", "lat": 25.3283, "lon": 82.9866 },
+  { "code": "PNBE", "name": "Patna Junction", "lat": 25.6022, "lon": 85.1376 },
+  { "code": "MYS", "name": "Mysuru Junction", "lat": 12.3164, "lon": 76.6436 },
+  { "code": "UBL", "name": "SSS Hubballi", "lat": 15.3524, "lon": 75.1481 },
+  { "code": "TVC", "name": "Thiruvananthapuram Central", "lat": 8.4871, "lon": 76.9529 },
+  { "code": "ERS", "name": "Ernakulam South", "lat": 9.9678, "lon": 76.2925 },
+  { "code": "BPL", "name": "Bhopal Junction", "lat": 23.2667, "lon": 77.4111 },
+  { "code": "GHY", "name": "Guwahati", "lat": 26.1818, "lon": 91.7516 }
+]

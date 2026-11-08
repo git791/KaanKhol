@@ -1,0 +1,15 @@
+name = "kaankhol-edge"
+main = "src/index.ts"
+compatibility_date = "2026-11-08"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kaankhol"
+database_id = "67f05de7-6d62-4677-a54b-a1507a9d1199"
+
+[vars]
+ENVIRONMENT = "production"
+
+[ai]
+binding = "AI"
