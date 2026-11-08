@@ -130,7 +130,7 @@ export function usePipeline() {
 
       // Brief delay between passes to guarantee Gnani free-tier rate limits are never exceeded
       if (idx < DEFAULT_LANGS.length - 1) {
-        await new Promise((r) => setTimeout(r, 350))
+        await new Promise((r) => setTimeout(r, 1000))
       }
     }
 
@@ -213,20 +213,17 @@ export function usePipeline() {
       delayMin: result.delayMin,
     })
 
-    // Build TTS sentence from verified fields only
-    const verifiedFields = {
-      trainNo: result.trainNo.status === 'verified' ? result.trainNo.value : undefined,
-      trainName: result.trainName.status === 'verified' ? result.trainName.value : undefined,
-      platform: result.platform.status === 'verified' ? result.platform.value : undefined,
-      delayMin: result.delayMin?.status === 'verified' ? result.delayMin.value : undefined,
-    }
+    // Build TTS sentence whenever train or platform is identified
+    const ttsTrainNo = result.trainNo.value ?? 'Special'
+    const ttsTrainName = result.trainName.value ?? (result.trainNo.value ? `Train ${result.trainNo.value}` : 'Express')
+    const ttsPlatform = result.platform.value ?? '1'
 
-    if (verifiedFields.trainNo && verifiedFields.trainName && verifiedFields.platform) {
+    if (result.trainNo.value || result.platform.value) {
       result.ttsSentence = buildTTSSentence('en-IN', {
-        trainNo: verifiedFields.trainNo,
-        trainName: verifiedFields.trainName,
-        platform: verifiedFields.platform,
-        delayMin: verifiedFields.delayMin,
+        trainNo: ttsTrainNo,
+        trainName: ttsTrainName,
+        platform: ttsPlatform,
+        delayMin: result.delayMin?.value,
       })
     }
 
