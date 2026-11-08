@@ -13,11 +13,10 @@ const app = new Hono<Env>()
 // ---------------------------------------------------------------------------
 
 /**
- * TODO (day 1): Confirm the exact Gnani Timbre v2.5 TTS endpoint from
- * https://docs.gnani.ai — the path and version below are best-effort.
- * Update this constant before the first TTS call.
+ * Gnani Timbre v2.5 Synchronous REST TTS endpoint.
+ * Verified against official Gnani / Vachana AI documentation.
  */
-const GNANI_TTS_URL = 'https://api.vachana.ai/tts/v1' // VERIFY THIS URL
+const GNANI_TTS_URL = 'https://api.vachana.ai/api/v1/tts/inference'
 
 /** Reasonable cap: a full trilingual announcement should be under 500 chars per language. */
 const MAX_TEXT_CHARS = 500
@@ -41,17 +40,13 @@ const LangSchema = z.enum([
 const TTSRequestSchema = z.object({
   text: z.string().min(1).max(MAX_TEXT_CHARS),
   language_code: LangSchema,
-  /**
-   * TODO (day 1): Verify available voice_id values from docs.gnani.ai.
-   * Gnani Timbre v2.5 may expose gender/speaker variants.
-   */
   voice_id: z.string().max(64).optional(),
 })
 
 // ---------------------------------------------------------------------------
 // POST /api/tts
 // Accepts: JSON { text, language_code, voice_id? }
-// Returns: audio/wav (or audio/mpeg) bytes — never cached
+// Returns: raw binary audio/wav bytes — never cached
 // ---------------------------------------------------------------------------
 app.post('/', async (c) => {
   // --- Parse JSON body ---
@@ -82,27 +77,28 @@ app.post('/', async (c) => {
   const { text, language_code, voice_id } = parse.data
 
   // --- Build Gnani Timbre v2.5 payload ---
-  // TODO (day 1): Verify the exact field names from docs.gnani.ai.
-  //   - Is the audio format field called "format", "output_format", or "encoding"?
-  //   - Supported values: "wav", "mp3", "ogg"?
-  //   - Is voice selection via "voice_id", "speaker_id", or "voice"?
-  const payload: Record<string, string> = {
+  // Nalini is the standard high-clarity female Indian English/Hindi voice
+  const payload: Record<string, unknown> = {
     text,
-    language_code,
-    format: 'wav', // TODO: verify format field name and accepted values
-  }
-  if (voice_id) {
-    payload['voice_id'] = voice_id // TODO: verify field name from docs
+    voice: voice_id ?? 'Nalini',
+    model: 'timbre-v2.5',
+    language: language_code,
+    speed: 1,
+    audio_config: {
+      encoding: 'linear_pcm',
+      container: 'wav',
+      num_channels: 1,
+      sample_rate: 24000,
+      sample_width: 2,
+    },
   }
 
   // --- Forward to Gnani Timbre v2.5 ---
-  // Audio is processed in-memory only — never persisted.
   let res: Response
   try {
     res = await fetch(GNANI_TTS_URL, {
       method: 'POST',
       headers: {
-        // Key is NEVER logged, NEVER forwarded to client, NEVER in URLs
         'X-API-Key-ID': c.env.GNANI_API_KEY_ID,
         'Content-Type': 'application/json',
       },
@@ -116,9 +112,10 @@ app.post('/', async (c) => {
   }
 
   if (!res.ok) {
-    // Never forward the upstream error body — may contain key hints
+    const errText = await res.text().catch(() => '')
+    console.error('Gnani TTS upstream error:', res.status, errText)
     return c.json(
-      { error: { code: 'upstream_error', message: `TTS returned HTTP ${res.status}` } },
+      { error: { code: 'upstream_error', message: `TTS returned HTTP ${res.status}: ${errText}` } },
       502,
     )
   }

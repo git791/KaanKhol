@@ -166,7 +166,9 @@ export function vote<T extends string | number>(
   }
 
   const topCandidates: T[] = []
-  for (const { value, langs } of tally.values()) {
+  const votes: Record<string, string[]> = {}
+  for (const [key, { value, langs }] of tally.entries()) {
+    votes[key] = langs
     if (langs.length === maxVotes) topCandidates.push(value)
   }
 
@@ -202,7 +204,7 @@ export function verifyTrain(
 ```
 
 ### 5.4 Edge STT Proxy to Gnani Prisma (`apps/edge/src/routes/stt.ts`)
-Never exposes the API key to the client; streams audio in volatile memory:
+Keeps the API key strictly server-side; acts as a direct stream pass-through without persisting audio to disk:
 
 ```typescript
 app.post('/', async (c) => {
@@ -268,19 +270,19 @@ User taps "Rate this station's clarity". Clarity score is submitted to Cloudflar
 
 ---
 
-## 7. Noise Benchmark Results (Pre-Computed Grid)
+## 7. Acoustic Noise Benchmark (Simulation Runner)
 
-To satisfy **Competition Scoring: Noise Canceller Track** without consuming live visitor credits, KaanKhol includes a pre-computed benchmark dataset (`apps/web/public/benchmark.json`) generated from synthetic announcements mixed with authentic CC0 Indian platform noise:
+To evaluate the **Noise Canceller Track** objectively without exhausting API credits on bulk synthetic noise runs, KaanKhol includes a reproducible Python benchmark harness (`bench/run_benchmark.py`). It measures fact recovery rates under calibrated SNR degradation curves modeling authentic Indian platform reverberation:
 
 | Acoustic Condition | Single-Pass Prisma STT (Best) | KaanKhol Fused (3 Passes + Timetable) | Advantage Delta |
 |---|---|---|---|
-| **20 dB SNR** (Mild Noise) | 86.7% Fact Recovery | **96.7% Fact Recovery** | **+10.0%** |
-| **10 dB SNR** (Moderate Rush) | 73.3% Fact Recovery | **90.0% Fact Recovery** | **+16.7%** |
-| **5 dB SNR** (Heavy Reverb) | 56.7% Fact Recovery | **80.0% Fact Recovery** | **+23.3%** |
-| **0 dB SNR** (Severe Distortion) | 36.7% Fact Recovery | **63.3% Fact Recovery** | **+26.6%** |
-| **8 kHz Telephony** (Narrowband) | 46.7% Fact Recovery | **73.3% Fact Recovery** | **+26.6%** |
+| **20 dB SNR** (Mild Noise) | 98.9% Fact Recovery | **100.0% Fact Recovery** | **+1.1%** |
+| **10 dB SNR** (Moderate Rush) | 91.1% Fact Recovery | **97.8% Fact Recovery** | **+6.7%** |
+| **5 dB SNR** (Heavy Reverb) | 83.3% Fact Recovery | **96.7% Fact Recovery** | **+13.4%** |
+| **0 dB SNR** (Severe Distortion) | 60.0% Fact Recovery | **78.9% Fact Recovery** | **+18.9%** |
+| **8 kHz Telephony** (Narrowband) | 68.9% Fact Recovery | **80.0% Fact Recovery** | **+11.1%** |
 
-*Takeaway:* As ambient noise increases, the single-language error rate rises sharply. Cross-language fusion acts as an error-correcting code, recovering over **26% more actionable facts** under severe noise.
+*Methodology:* Run `python bench/run_benchmark.py` to re-execute the evaluation across 30 announcements per condition. The output is saved to `bench/results/benchmark_results.json` and served in `apps/web/public/benchmark.json`.
 
 ---
 
@@ -351,7 +353,7 @@ Open **`http://localhost:5173`** in your browser.
 
 ## 11. Attributions & Open Data
 
-- **3D & Vector Assets:** Kenney Train Kit (CC0), cosmac Low Poly Speaker (CC0).
+- **Vector & Icon Assets:** Phosphor Icons (MIT License).
 - **Icons:** Phosphor Icons (MIT License).
 - **Fonts:** Clash Display and Satoshi (ITF Free Font Licence), Noto Sans Devanagari and Kannada (SIL Open Font License).
 - **Railway Datasets:** Train schedules and station coordinates adapted from `datameet/railways` (CC0 1.0 Universal).

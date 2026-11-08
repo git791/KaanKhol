@@ -13,22 +13,16 @@
   "dependencies": {
     "@kaankhol/core": "workspace:*",
     "@phosphor-icons/react": "^2.1.7",
-    "@react-three/drei": "^10.0.0",
-    "@react-three/fiber": "^9.0.0",
     "gsap": "^3.12.5",
     "lenis": "^1.1.14",
-    "maplibre-gl": "^4.7.1",
-    "motion": "^12.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "three": "^0.182.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
     "@gsap/react": "^2.1.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@types/three": "^0.182.0",
     "@vitejs/plugin-react": "^4.3.4",
     "tailwindcss": "^4.0.0",
     "@tailwindcss/vite": "^4.0.0",

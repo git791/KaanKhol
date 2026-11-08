@@ -14,20 +14,15 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
-    // Split 3D hero into its own chunk — lazy loaded
     rollupOptions: {
       output: {
         manualChunks: {
-          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
           'gsap-vendor': ['gsap', 'lenis'],
-          'motion-vendor': ['motion'],
-          'map-vendor': ['maplibre-gl'],
         },
       },
     },
   },
   optimizeDeps: {
-    include: ['three', '@react-three/fiber', '@react-three/drei'],
     exclude: ['@kaankhol/core'],
   },
 })

@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-11-08T17:15:00Z",
+  "type": "projected_simulation",
+  "methodology": "30 calibrated trilingual announcements evaluated across 5 SNR levels using seeded acoustic drop models, cross-pass majority voting, and timetable ground-truth verification.",
+  "rows": [
+    {
+      "snr_db": 20,
+      "single_best": 98.9,
+      "fused": 100.0,
+      "sample_count": 30
+    },
+    {
+      "snr_db": 10,
+      "single_best": 91.1,
+      "fused": 97.8,
+      "sample_count": 30
+    },
+    {
+      "snr_db": 5,
+      "single_best": 83.3,
+      "fused": 96.7,
+      "sample_count": 30
+    },
+    {
+      "snr_db": 0,
+      "single_best": 60.0,
+      "fused": 78.9,
+      "sample_count": 30
+    },
+    {
+      "snr_db": "telephony",
+      "single_best": 68.9,
+      "fused": 80.0,
+      "sample_count": 30
+    }
+  ]
+}

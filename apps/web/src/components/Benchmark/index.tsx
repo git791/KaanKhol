@@ -153,8 +153,8 @@ export default function Benchmark() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-[var(--color-night-700)] text-xs text-[var(--color-steel-400)] flex items-center justify-between">
-          <span>Synthetic corpus generated with Gnani Timbre v2.5; mixed with CC0 platform noise.</span>
-          <span className="font-mono">N = {activeRow.sample_count} runs</span>
+          <span>Simulation evaluated with seeded acoustic drop models; reproducible via bench/run_benchmark.py.</span>
+          <span className="font-mono">N = {activeRow.sample_count} runs per condition</span>
         </div>
       </div>
     </section>

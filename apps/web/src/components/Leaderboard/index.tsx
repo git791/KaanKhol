@@ -19,6 +19,9 @@ const FALLBACK_SEED: LeaderboardStation[] = [
   { station_code: 'NDLS', avg_score: 65, submission_count: 22, has_sample: 1 },
   { station_code: 'MAS', avg_score: 59, submission_count: 18, has_sample: 1 },
   { station_code: 'BCT', avg_score: 52, submission_count: 11, has_sample: 1 },
+  { station_code: 'HWH', avg_score: 68, submission_count: 16, has_sample: 1 },
+  { station_code: 'PNBE', avg_score: 54, submission_count: 8, has_sample: 1 },
+  { station_code: 'ADI', avg_score: 74, submission_count: 12, has_sample: 1 },
 ]
 
 export default function Leaderboard({ lastScore }: Props) {
@@ -61,7 +64,7 @@ export default function Leaderboard({ lastScore }: Props) {
         <div className="p-4 px-6 bg-[var(--color-night-950)]/50 border-b border-[var(--color-night-700)] flex justify-between items-center text-xs font-mono text-[var(--color-steel-400)]">
           <span>STATION / JUNCTION</span>
           <div className="flex gap-8">
-            <span className="hidden sm:inline">PASSES TESTED</span>
+            <span className="hidden sm:inline">REPORTS SUBMITTED</span>
             <span>CLARITY SCORE</span>
           </div>
         </div>
@@ -99,7 +102,7 @@ export default function Leaderboard({ lastScore }: Props) {
 
                 <div className="flex items-center gap-8">
                   <span className="hidden sm:inline text-xs font-mono text-[var(--color-steel-400)]">
-                    {item.submission_count} reports
+                    {item.submission_count} {item.submission_count === 1 ? 'report' : 'reports'}
                   </span>
                   <div className="flex items-center gap-2 w-20 justify-end">
                     <span

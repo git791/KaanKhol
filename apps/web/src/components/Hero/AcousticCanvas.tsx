@@ -63,8 +63,8 @@ export default function AcousticCanvas({ mousePos, reduced }: Props) {
 
       // ── 1. Railway Track Perspective Lines (per ASSETS.md §6.3) ──
       ctx.save()
-      const vanishX = w * 0.5 + smoothX * 40
-      const vanishY = h * 0.38 + smoothY * 25
+      const vanishX = w * 0.5 + smoothX * 35
+      const vanishY = h * 0.56 + smoothY * 20
 
       ctx.strokeStyle = 'rgba(27, 58, 85, 0.35)' // Night-700 subtle grid
       ctx.lineWidth = 1

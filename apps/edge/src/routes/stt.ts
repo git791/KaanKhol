@@ -131,10 +131,11 @@ app.post('/', async (c) => {
 
   // --- Forward to Gnani Prisma v2.5 with automatic retry on 429 ---
   // IMPORTANT: audio bytes are forwarded in-memory and never persisted.
+  const fileBytes = await (rawFile as unknown as Blob).arrayBuffer()
   let res: Response | null = null
   for (let attempt = 0; attempt < 3; attempt++) {
     const upstream = new FormData()
-    upstream.set('audio_file', rawFile as any)
+    upstream.set('audio_file', new Blob([fileBytes], { type: 'audio/wav' }), 'audio.wav')
     upstream.set('language_code', lang)
     upstream.set('preferred_language', lang)
     upstream.set('format', 'transcribe')
@@ -167,9 +168,10 @@ app.post('/', async (c) => {
   }
 
   if (!res || !res.ok) {
-    // Never forward the upstream error body — it may contain key hints or PII
+    const errText = await res?.text().catch(() => '')
+    console.error('Gnani upstream error:', res?.status, errText)
     return c.json(
-      { error: { code: 'upstream_error', message: `STT returned HTTP ${res?.status ?? 502}` } },
+      { error: { code: 'upstream_error', message: `STT returned HTTP ${res?.status ?? 502}: ${errText}` } },
       502,
     )
   }

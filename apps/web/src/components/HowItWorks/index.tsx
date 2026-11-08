@@ -1,20 +1,20 @@
-import { SparkleIcon, CheckCircleIcon, ShieldCheckIcon } from '@phosphor-icons/react'
+import { BroadcastIcon, CheckCircleIcon, ShieldCheckIcon, GitMergeIcon } from '@phosphor-icons/react'
 
 export default function HowItWorks() {
   const steps = [
     {
       num: '01',
-      icon: <SparkleIcon size={24} weight="duotone" className="text-[var(--color-lamp-400)]" />,
+      icon: <BroadcastIcon size={24} weight="duotone" className="text-[var(--color-lamp-400)]" />,
       title: '3 Passes, 3 Languages',
       sub: 'Kannada · Hindi · English',
-      desc: 'Indian railway platforms repeat every announcement 3 times. Crackly speakers and Diwali crowd noise corrupt individual words, but the facts are duplicated across passes.',
+      desc: 'Indian railway platforms repeat every announcement 3 times. Crackly speakers and Diwali crowd noise corrupt individual words, but the core facts are repeated across passes.',
     },
     {
       num: '02',
-      icon: <CheckCircleIcon size={24} weight="duotone" className="text-[var(--color-wave-400)]" />,
+      icon: <GitMergeIcon size={24} weight="duotone" className="text-[var(--color-wave-400)]" />,
       title: 'Cross-Language Voting',
       sub: 'Redundancy as Error Correction',
-      desc: 'Gnani Prisma v2.5 transcribes each pass in parallel. Our voting algorithm detects agreement on train numbers, platform, and delay across languages.',
+      desc: 'Gnani Prisma v2.5 transcribes each pass. Our voting algorithm detects agreement on train numbers, platform, and delay across all three language streams.',
     },
     {
       num: '03',
@@ -42,9 +42,42 @@ export default function HowItWorks() {
         >
           How It Works
         </h2>
-        <p className="max-w-2xl mx-auto text-sm md:text-base text-[var(--color-steel-400)]">
+        <p className="max-w-2xl mx-auto text-sm md:text-base text-[var(--color-chalk-100)]/80">
           Instead of fighting noise with a single mic, KaanKhol turns station repetition into an error-correcting code.
         </p>
+
+        {/* Visual 3-Lane Convergence Diagram */}
+        <div className="mt-12 p-6 rounded-2xl bg-[var(--color-night-950)]/70 border border-[var(--color-night-700)] max-w-2xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono">
+            {/* Input lanes */}
+            <div className="flex flex-col gap-2 w-full sm:w-auto text-left">
+              <div className="flex items-center gap-2 text-[var(--color-lamp-400)]">
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-lamp-400)]"></span>
+                <span>Pass 1: Regional (kn-IN)</span>
+              </div>
+              <div className="flex items-center gap-2 text-[var(--color-wave-400)]">
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-wave-400)]"></span>
+                <span>Pass 2: Hindi (hi-IN)</span>
+              </div>
+              <div className="flex items-center gap-2 text-[var(--color-diya-400)]">
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-diya-400)]"></span>
+                <span>Pass 3: English (en-IN)</span>
+              </div>
+            </div>
+
+            {/* Fusion step */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--color-night-800)] border border-[var(--color-night-700)] text-[var(--color-chalk-100)]">
+              <CheckCircleIcon size={16} className="text-[var(--color-lamp-400)]" />
+              <span>Majority Vote + Timetable</span>
+            </div>
+
+            {/* Output */}
+            <div className="flex items-center gap-2 text-[var(--color-go-400)] font-bold">
+              <span className="w-3 h-3 rounded-full bg-[var(--color-go-400)] animate-pulse"></span>
+              <span>Verified Fact Output</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -69,7 +102,7 @@ export default function HowItWorks() {
               <p className="text-xs font-mono text-[var(--color-lamp-400)] mb-4">
                 {step.sub}
               </p>
-              <p className="text-sm text-[var(--color-steel-400)] leading-relaxed">
+              <p className="text-sm text-[var(--color-chalk-100)]/80 leading-relaxed">
                 {step.desc}
               </p>
             </div>

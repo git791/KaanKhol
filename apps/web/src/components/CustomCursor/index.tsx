@@ -8,8 +8,14 @@ export default function CustomCursor() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    // Disable on touch devices or reduced motion
-    if ('ontouchstart' in window || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // Strictly disable on touch devices, coarse pointers, or reduced motion
+    const isTouchOrCoarse =
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(hover: none)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      'ontouchstart' in window
+
+    if (isTouchOrCoarse) {
       return
     }
 

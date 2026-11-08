@@ -40,7 +40,7 @@ export default function Hero() {
         </div>
 
         <h1
-          className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-[var(--color-chalk-100)] leading-tight"
+          className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-[var(--color-chalk-100)] leading-tight my-2"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           KaanKhol
@@ -49,11 +49,11 @@ export default function Hero() {
           </span>
         </h1>
 
-        <p className="text-base sm:text-lg text-[var(--color-steel-400)] max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-[var(--color-chalk-100)]/85 max-w-2xl mx-auto leading-relaxed font-normal">
           Indian railway platform announcements are repeated thrice in three languages.
           Over reverberant PA systems and crowd roar, KaanKhol listens to all three with{' '}
-          <strong className="text-[var(--color-chalk-100)]">Gnani Prisma v2.5</strong>, cross-checks facts against the national timetable, and re-announces verified departures clearly with{' '}
-          <strong className="text-[var(--color-chalk-100)]">Gnani Timbre v2.5</strong>.
+          <strong className="text-[var(--color-lamp-400)] font-semibold">Gnani Prisma v2.5</strong>, cross-checks facts against the national timetable, and re-announces verified departures clearly with{' '}
+          <strong className="text-[var(--color-go-400)] font-semibold">Gnani Timbre v2.5</strong>.
         </p>
 
         {/* CTA Buttons */}

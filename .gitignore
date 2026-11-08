@@ -76,6 +76,7 @@ blob-report/
 
 # ─── BENCH — raw audio (never commit audio) ──────────────────────────────────
 *.wav
+!apps/web/public/samples/*.wav
 bench/noise/*.wav
 bench/noise/*.mp3
 bench/noise/*.ogg
