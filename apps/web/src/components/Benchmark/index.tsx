@@ -23,18 +23,18 @@ export default function Benchmark() {
   const delta = (activeRow.fused - activeRow.single_best).toFixed(1)
 
   const downloadCSV = () => {
-    const header = 'Condition,Single_Best_Recovery_Pct,Fused_Recovery_Pct,Delta_Gain_Pct,Sample_Size\n'
+    const header = 'Condition,Unassisted_Single_Pass_Pct,Fused_Redundancy_Pct,Theoretical_Gain_Pct,Sample_Size,Model_Type\n'
     const body = rows
       .map(
         (r) =>
-          `${typeof r.snr_db === 'number' ? r.snr_db + ' dB' : 'Telephony (8kHz)'},${r.single_best}%,${r.fused}%,+${(r.fused - r.single_best).toFixed(1)}%,${r.sample_count}`
+          `${typeof r.snr_db === 'number' ? r.snr_db + ' dB' : 'Telephony (8kHz)'},${r.single_best}%,${r.fused}%,+${(r.fused - r.single_best).toFixed(1)}%,${r.sample_count},Simulated_Acoustic_Drop_Model`
       )
       .join('\n')
     const blob = new Blob([header + body], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'kaankhol_noise_benchmark.csv'
+    a.download = 'kaankhol_simulated_benchmark.csv'
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -48,17 +48,17 @@ export default function Benchmark() {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
         <div>
           <span className="text-xs uppercase tracking-widest font-mono text-[var(--color-wave-400)]">
-            Noise Canceller Track Verification
+            Theoretical Redundancy Model (Simulation)
           </span>
           <h2
             id="bench-heading"
             className="text-3xl md:text-5xl font-bold mt-2"
             style={{ fontFamily: 'var(--font-display)', color: 'var(--color-chalk-100)' }}
           >
-            Fact Recovery Benchmark
+            Acoustic Robustness Model
           </h2>
-          <p className="text-sm text-[var(--color-steel-400)] mt-2">
-            Multi-pass trilingual fusion vs. best single-pass STT under station crowd noise and 8 kHz telephony.
+          <p className="text-sm text-[var(--color-chalk-100)]/80 mt-2">
+            Simulated fact-recovery gain of triple modular redundancy vs. unassisted single-pass listening across 5 noise levels.
           </p>
         </div>
 
@@ -67,7 +67,7 @@ export default function Benchmark() {
           className="self-start md:self-auto flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono border border-[var(--color-night-700)] hover:border-[var(--color-steel-400)] text-[var(--color-chalk-100)] transition-colors"
         >
           <DownloadSimpleIcon size={16} />
-          Export CSV Dataset
+          Export Simulation CSV
         </button>
       </div>
 
@@ -122,9 +122,9 @@ export default function Benchmark() {
             <div className="flex justify-between text-xs font-mono mb-2">
               <span className="text-[var(--color-chalk-100)] font-bold flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-go-400)]"></span>
-                KaanKhol Fused (3 Passes + Timetable)
+                KaanKhol Fused (Triple Modular Redundancy + Timetable)
               </span>
-              <span className="text-[var(--color-go-400)] font-bold">{activeRow.fused}% Fact Accuracy</span>
+              <span className="text-[var(--color-go-400)] font-bold">{activeRow.fused}% Modeled Recovery</span>
             </div>
             <div className="h-5 w-full bg-[var(--color-night-950)] rounded-full overflow-hidden p-0.5 border border-[var(--color-night-700)]">
               <div
@@ -139,9 +139,9 @@ export default function Benchmark() {
             <div className="flex justify-between text-xs font-mono mb-2">
               <span className="text-[var(--color-steel-400)] flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-steel-400)]"></span>
-                Single-Language Best Pass (Prisma STT alone)
+                Unassisted Single Pass (Acoustic Drop Model)
               </span>
-              <span className="text-[var(--color-steel-400)]">{activeRow.single_best}% Fact Accuracy</span>
+              <span className="text-[var(--color-steel-400)]">{activeRow.single_best}% Modeled Recovery</span>
             </div>
             <div className="h-5 w-full bg-[var(--color-night-950)] rounded-full overflow-hidden p-0.5 border border-[var(--color-night-700)]">
               <div

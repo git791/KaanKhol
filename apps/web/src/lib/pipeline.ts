@@ -12,7 +12,7 @@ import { buildTTSSentence } from '@kaankhol/core'
 import type { Fields, Pass } from '@kaankhol/core'
 import { transcribe, extractFields, synthesise } from './api'
 import { toWav16kMono, startRecording } from './audio'
-import type { PipelineState, LangCode, FusedResult, FieldStatus, LaneState } from '../types'
+import type { PipelineState, LangCode, FusedResult, FieldStatus, LaneState, LaneStatus } from '../types'
 
 // Trimmed timetable — imported as static JSON
 import trainData from '../data/trains.json'
@@ -22,15 +22,30 @@ const trainDB = new Map<string, Train>(
   (trainData as Train[]).map((t) => [t.number, t])
 )
 
-const DEFAULT_LANGS: [LangCode, LangCode, LangCode] = ['kn-IN', 'hi-IN', 'en-IN']
 const LANE_TIMEOUT_MS = 30_000
 
 /** Main pipeline hook. Returns state + control functions. */
-export function usePipeline() {
+export function usePipeline(initialRegional: LangCode = 'kn-IN') {
+  const [regionalLang, setRegionalLang] = useState<LangCode>(initialRegional)
+  const activeLangs: [LangCode, LangCode, LangCode] = [regionalLang, 'hi-IN', 'en-IN']
+
   const [state, setState] = useState<PipelineState>({
     phase: 'idle',
-    lanes: DEFAULT_LANGS.map((lang) => ({ lang, status: 'waiting' })),
+    lanes: ([initialRegional, 'hi-IN', 'en-IN'] as LangCode[]).map((lang) => ({ lang, status: 'waiting' as LaneStatus })),
   })
+
+  const changeRegionalLang = useCallback((lang: LangCode) => {
+    setRegionalLang(lang)
+    setState((s) => {
+      if (s.phase === 'idle') {
+        return {
+          ...s,
+          lanes: [lang, 'hi-IN', 'en-IN'].map((l) => ({ lang: l as LangCode, status: 'waiting' })),
+        }
+      }
+      return s
+    })
+  }, [])
 
   const abortRef = useRef<AbortController | null>(null)
   const recorderRef = useRef<{ stop: () => Promise<Blob> } | null>(null)
@@ -39,7 +54,7 @@ export function usePipeline() {
   // ── Start recording ───────────────────────────────────────────────────────
 
   const startRecordingSession = useCallback(async () => {
-    setState((s) => ({ ...s, phase: 'recording', lanes: DEFAULT_LANGS.map((lang) => ({ lang, status: 'waiting' })) }))
+    setState((s) => ({ ...s, phase: 'recording', lanes: activeLangs.map((lang) => ({ lang, status: 'waiting' })) }))
     try {
       recorderRef.current = await startRecording(60, setMicLevel)
     } catch (err) {
@@ -48,7 +63,7 @@ export function usePipeline() {
         : 'Could not access microphone.'
       setState((s) => ({ ...s, phase: 'error', errorMessage: msg }))
     }
-  }, [])
+  }, [activeLangs])
 
   // ── Stop recording and start pipeline ─────────────────────────────────────
 
@@ -73,12 +88,12 @@ export function usePipeline() {
     }
 
     await runPipeline(wavBlob)
-  }, [])
+  }, [activeLangs])
 
   // ── Upload file ───────────────────────────────────────────────────────────
 
   const processFile = useCallback(async (file: File) => {
-    setState((s) => ({ ...s, phase: 'processing-audio', lanes: DEFAULT_LANGS.map((lang) => ({ lang, status: 'waiting' })) }))
+    setState((s) => ({ ...s, phase: 'processing-audio', lanes: activeLangs.map((lang) => ({ lang, status: 'waiting' })) }))
     let wavBlob: Blob
     try {
       wavBlob = await toWav16kMono(file)
@@ -91,7 +106,7 @@ export function usePipeline() {
       return
     }
     await runPipeline(wavBlob)
-  }, [])
+  }, [activeLangs])
 
   // ── Core pipeline ─────────────────────────────────────────────────────────
 
@@ -104,12 +119,12 @@ export function usePipeline() {
     setState((s) => ({
       ...s,
       phase: 'transcribing',
-      lanes: DEFAULT_LANGS.map((lang, i) => ({ lang, status: i === 0 ? 'transcribing' : 'waiting' })),
+      lanes: activeLangs.map((lang, i) => ({ lang, status: i === 0 ? 'transcribing' : 'waiting' })),
     }))
 
     const successfulLanes: { lang: LangCode; transcript: string }[] = []
 
-    for (const [idx, lang] of DEFAULT_LANGS.entries()) {
+    for (const [idx, lang] of activeLangs.entries()) {
       updateLane(idx, { status: 'transcribing' })
 
       const timeoutId = setTimeout(() => abort.abort(), LANE_TIMEOUT_MS)
@@ -129,7 +144,7 @@ export function usePipeline() {
       }
 
       // Brief delay between passes to guarantee Gnani free-tier rate limits are never exceeded
-      if (idx < DEFAULT_LANGS.length - 1) {
+      if (idx < activeLangs.length - 1) {
         await new Promise((r) => setTimeout(r, 1000))
       }
     }
@@ -241,12 +256,14 @@ export function usePipeline() {
 
   const reset = useCallback(() => {
     abortRef.current?.abort()
-    setState({ phase: 'idle', lanes: DEFAULT_LANGS.map((lang) => ({ lang, status: 'waiting' })) })
-  }, [])
+    setState({ phase: 'idle', lanes: [regionalLang, 'hi-IN', 'en-IN'].map((lang) => ({ lang: lang as LangCode, status: 'waiting' })) })
+  }, [regionalLang])
 
   return {
     state,
     micLevel,
+    regionalLang,
+    setRegionalLang: changeRegionalLang,
     startRecording: startRecordingSession,
     stopRecording: stopRecordingAndProcess,
     processFile,

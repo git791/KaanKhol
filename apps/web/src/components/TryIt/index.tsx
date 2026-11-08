@@ -2,23 +2,42 @@
  * TryIt section — record, upload, or pick a sample.
  */
 import { useRef } from 'react'
-import { MicrophoneIcon, UploadSimpleIcon, PlayIcon, StopIcon, WaveformIcon } from '@phosphor-icons/react'
-import type { PipelineState } from '../../types'
+import { MicrophoneIcon, UploadSimpleIcon, PlayIcon, StopIcon, WaveformIcon, TranslateIcon } from '@phosphor-icons/react'
+import type { PipelineState, LangCode } from '../../types'
 
 interface Props {
   state: PipelineState
   micLevel: number
+  regionalLang?: LangCode
+  onSelectRegional?: (lang: LangCode) => void
   onStartRecording: () => void
   onStopRecording: () => void
   onFileUpload: (file: File) => void
 }
 
-const SAMPLES = [
-  { label: 'Bengaluru Platform 4', file: '/samples/sbc-platform4-kn-hi-en.wav' },
-  { label: 'Delhi Express', file: '/samples/ndls-rajdhani-kn-hi-en.wav' },
+const REGIONAL_LANGUAGES: Array<{ code: LangCode; name: string; native: string; junction: string }> = [
+  { code: 'kn-IN', name: 'Kannada', native: 'ಕನ್ನಡ', junction: 'Bengaluru (SBC)' },
+  { code: 'ta-IN', name: 'Tamil', native: 'தமிழ்', junction: 'Chennai (MAS)' },
+  { code: 'te-IN', name: 'Telugu', native: 'తెలుగు', junction: 'Hyderabad (HYB)' },
+  { code: 'mr-IN', name: 'Marathi', native: 'मराठी', junction: 'Mumbai (CSMT)' },
+  { code: 'bn-IN', name: 'Bengali', native: 'বাংলা', junction: 'Kolkata (HWH)' },
+  { code: 'gu-IN', name: 'Gujarati', native: 'ગુજરાતી', junction: 'Ahmedabad (ADI)' },
 ]
 
-export default function TryIt({ state, micLevel, onStartRecording, onStopRecording, onFileUpload }: Props) {
+const SAMPLES = [
+  { label: 'Bengaluru Platform 4 (kn-IN)', file: '/samples/sbc-platform4-kn-hi-en.wav', lang: 'kn-IN' as LangCode },
+  { label: 'Delhi Express (en-IN)', file: '/samples/ndls-rajdhani-kn-hi-en.wav', lang: 'kn-IN' as LangCode },
+]
+
+export default function TryIt({
+  state,
+  micLevel,
+  regionalLang = 'kn-IN',
+  onSelectRegional,
+  onStartRecording,
+  onStopRecording,
+  onFileUpload,
+}: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const isRecording = state.phase === 'recording'
   const isBusy = ['processing-audio', 'transcribing', 'extracting', 'fusing'].includes(state.phase)
@@ -29,7 +48,8 @@ export default function TryIt({ state, micLevel, onStartRecording, onStopRecordi
     e.target.value = ''
   }
 
-  const handleSample = async (sampleUrl: string) => {
+  const handleSample = async (sampleUrl: string, sampleLang: LangCode) => {
+    onSelectRegional?.(sampleLang)
     const res = await fetch(sampleUrl)
     const blob = await res.blob()
     onFileUpload(new File([blob], 'sample.wav', { type: 'audio/wav' }))
@@ -48,11 +68,50 @@ export default function TryIt({ state, micLevel, onStartRecording, onStopRecordi
       >
         Decode an Announcement
       </h2>
-      <p className="mb-10" style={{ color: 'var(--color-steel-400)' }}>
+      <p className="mb-8" style={{ color: 'var(--color-steel-400)' }}>
         <span lang="hi" className="text-indic">घोषणा डिकोड करें</span>
         {' · '}
         <span lang="kn" className="text-indic">ಪ್ರಕಟನೆ ಅರ್ಥೈಸಿ</span>
       </p>
+
+      {/* Station Regional Language Selector */}
+      <div className="mb-10 p-4 rounded-2xl bg-[var(--color-night-800)] border border-[var(--color-night-700)]">
+        <div className="flex items-center justify-between mb-3 text-xs font-mono">
+          <span className="flex items-center gap-1.5 text-[var(--color-lamp-400)] font-bold">
+            <TranslateIcon size={16} />
+            <span>Pass 1: Station Regional Language</span>
+          </span>
+          <span className="text-[var(--color-steel-400)] hidden sm:inline">
+            Pass 2: Hindi · Pass 3: English
+          </span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {REGIONAL_LANGUAGES.map((lang) => {
+            const active = regionalLang === lang.code
+            return (
+              <button
+                key={lang.code}
+                type="button"
+                onClick={() => onSelectRegional?.(lang.code)}
+                disabled={isBusy || isRecording}
+                className={`p-2.5 px-3 rounded-xl text-left border transition-all ${
+                  active
+                    ? 'bg-[var(--color-lamp-400)]/15 border-[var(--color-lamp-400)] text-[var(--color-chalk-100)] shadow-sm'
+                    : 'bg-[var(--color-night-900)] border-[var(--color-night-700)] text-[var(--color-steel-400)] hover:text-[var(--color-chalk-100)]'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs">{lang.name}</span>
+                  <span className="text-[10px] font-mono opacity-60">{lang.code.split('-')[0]}</span>
+                </div>
+                <div className="text-[11px] text-[var(--color-chalk-100)]/70 truncate mt-0.5">
+                  {lang.native} · {lang.junction}
+                </div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
 
       {/* Error state */}
       {state.phase === 'error' && (
@@ -138,7 +197,7 @@ export default function TryIt({ state, micLevel, onStartRecording, onStopRecordi
         {SAMPLES.map((s) => (
           <button
             key={s.file}
-            onClick={() => handleSample(s.file)}
+            onClick={() => handleSample(s.file, s.lang)}
             disabled={isBusy || isRecording}
             className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-colors"
             style={{

@@ -270,19 +270,21 @@ User taps "Rate this station's clarity". Clarity score is submitted to Cloudflar
 
 ---
 
-## 7. Acoustic Noise Benchmark (Simulation Runner)
+## 7. Acoustic Robustness Simulation (Triple Modular Redundancy Model)
 
-To evaluate the **Noise Canceller Track** objectively without exhausting API credits on bulk synthetic noise runs, KaanKhol includes a reproducible Python benchmark harness (`bench/run_benchmark.py`). It measures fact recovery rates under calibrated SNR degradation curves modeling authentic Indian platform reverberation:
+To illustrate the mathematical advantage of **Triple Modular Redundancy (TMR)** across noisy platform transmissions without making unverified claims about empirical field noise recordings, KaanKhol includes an open Python simulation harness (`bench/run_benchmark.py`).
 
-| Acoustic Condition | Single-Pass Prisma STT (Best) | KaanKhol Fused (3 Passes + Timetable) | Advantage Delta |
+It models fact recovery rates across 5 simulated SNR levels using calibrated acoustic drop probabilities:
+
+| Simulated Condition | Unassisted Single Pass | KaanKhol Fused (TMR + Timetable) | Theoretical Gain |
 |---|---|---|---|
-| **20 dB SNR** (Mild Noise) | 98.9% Fact Recovery | **100.0% Fact Recovery** | **+1.1%** |
-| **10 dB SNR** (Moderate Rush) | 91.1% Fact Recovery | **97.8% Fact Recovery** | **+6.7%** |
-| **5 dB SNR** (Heavy Reverb) | 83.3% Fact Recovery | **96.7% Fact Recovery** | **+13.4%** |
-| **0 dB SNR** (Severe Distortion) | 60.0% Fact Recovery | **78.9% Fact Recovery** | **+18.9%** |
-| **8 kHz Telephony** (Narrowband) | 68.9% Fact Recovery | **80.0% Fact Recovery** | **+11.1%** |
+| **20 dB SNR** (Mild Noise) | 98.9% | **100.0%** | **+1.1%** |
+| **10 dB SNR** (Moderate Rush) | 91.1% | **97.8%** | **+6.7%** |
+| **5 dB SNR** (Heavy Reverb) | 83.3% | **96.7%** | **+13.4%** |
+| **0 dB SNR** (Severe Distortion) | 60.0% | **78.9%** | **+18.9%** |
+| **8 kHz Telephony** (Narrowband) | 68.9% | **80.0%** | **+11.1%** |
 
-*Methodology:* Run `python bench/run_benchmark.py` to re-execute the evaluation across 30 announcements per condition. The output is saved to `bench/results/benchmark_results.json` and served in `apps/web/public/benchmark.json`.
+*Methodology:* Run `python bench/run_benchmark.py` to re-execute the mathematical evaluation. The output is saved to `bench/results/benchmark_results.json` and served in `apps/web/public/benchmark.json`.
 
 ---
 

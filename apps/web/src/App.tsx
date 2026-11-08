@@ -13,7 +13,7 @@ import CustomCursor from './components/CustomCursor'
 const Hero = lazy(() => import('./components/Hero'))
 
 export default function App() {
-  const { state, micLevel, startRecording, stopRecording, processFile, reset } = usePipeline()
+  const { state, micLevel, regionalLang, setRegionalLang, startRecording, stopRecording, processFile, reset } = usePipeline()
 
   useEffect(() => {
     initLenis()
@@ -41,6 +41,8 @@ export default function App() {
         <TryIt
           state={state}
           micLevel={micLevel}
+          regionalLang={regionalLang}
+          onSelectRegional={setRegionalLang}
           onStartRecording={startRecording}
           onStopRecording={stopRecording}
           onFileUpload={processFile}

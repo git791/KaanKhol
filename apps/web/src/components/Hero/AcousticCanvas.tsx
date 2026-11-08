@@ -63,10 +63,10 @@ export default function AcousticCanvas({ mousePos, reduced }: Props) {
 
       // ── 1. Railway Track Perspective Lines (per ASSETS.md §6.3) ──
       ctx.save()
-      const vanishX = w * 0.5 + smoothX * 35
-      const vanishY = h * 0.56 + smoothY * 20
+      const vanishX = w * 0.5 + smoothX * 30
+      const vanishY = h * 0.78 + smoothY * 15
 
-      ctx.strokeStyle = 'rgba(27, 58, 85, 0.35)' // Night-700 subtle grid
+      ctx.strokeStyle = 'rgba(27, 58, 85, 0.30)' // Night-700 subtle grid
       ctx.lineWidth = 1
 
       // Left rail & Right rail
@@ -132,16 +132,16 @@ export default function AcousticCanvas({ mousePos, reduced }: Props) {
       }
 
       // ── 4. Three Converging Language Waveform Ribbons ──
-      // Lane 1: Regional Kannada (Amber #FFB62E)
+      // Lane 1: Regional Language (Amber #FFB62E)
       drawWaveRibbon(ctx, {
         startX: w * 0.05,
-        startY: focalY - 65,
+        startY: focalY - 35,
         focalX,
         focalY,
         color: 'rgba(255, 182, 46, 0.85)',
         glowColor: 'rgba(255, 182, 46, 0.25)',
         freq: 0.014,
-        amp: 18 + Math.sin(time * 2.2) * 6,
+        amp: 14 + Math.sin(time * 2.2) * 5,
         time: time * 2.0,
       })
 
@@ -154,20 +154,20 @@ export default function AcousticCanvas({ mousePos, reduced }: Props) {
         color: 'rgba(53, 196, 216, 0.85)',
         glowColor: 'rgba(53, 196, 216, 0.25)',
         freq: 0.018,
-        amp: 22 + Math.cos(time * 1.8) * 8,
+        amp: 16 + Math.cos(time * 1.8) * 6,
         time: time * 2.5 + 1.2,
       })
 
       // Lane 3: English (Diya Orange #FF8A3D)
       drawWaveRibbon(ctx, {
         startX: w * 0.05,
-        startY: focalY + 65,
+        startY: focalY + 35,
         focalX,
         focalY,
         color: 'rgba(255, 138, 61, 0.85)',
         glowColor: 'rgba(255, 138, 61, 0.25)',
         freq: 0.016,
-        amp: 16 + Math.sin(time * 2.8) * 6,
+        amp: 12 + Math.sin(time * 2.8) * 5,
         time: time * 1.9 + 2.4,
       })
 
