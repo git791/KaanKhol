@@ -129,36 +129,47 @@ app.post('/', async (c) => {
     )
   }
 
-  // --- Forward to Gnani Prisma v2.5 ---
+  // --- Forward to Gnani Prisma v2.5 with automatic retry on 429 ---
   // IMPORTANT: audio bytes are forwarded in-memory and never persisted.
-  const upstream = new FormData()
-  upstream.set('audio_file', rawFile as any)
-  upstream.set('language_code', lang)
-  upstream.set('preferred_language', lang)
-  upstream.set('format', 'transcribe')
-  upstream.set('itn_native_numerals', 'false')
+  let res: Response | null = null
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const upstream = new FormData()
+    upstream.set('audio_file', rawFile as any)
+    upstream.set('language_code', lang)
+    upstream.set('preferred_language', lang)
+    upstream.set('format', 'transcribe')
+    upstream.set('itn_native_numerals', 'false')
 
-  let res: Response
-  try {
-    res = await fetch(GNANI_STT_URL, {
-      method: 'POST',
-      headers: {
-        // Key is NEVER logged, NEVER forwarded to client, NEVER in URLs
-        'X-API-Key-ID': c.env.GNANI_API_KEY_ID,
-      },
-      body: upstream,
-    })
-  } catch {
-    return c.json(
-      { error: { code: 'upstream_unavailable', message: 'STT service unreachable' } },
-      503,
-    )
+    try {
+      res = await fetch(GNANI_STT_URL, {
+        method: 'POST',
+        headers: {
+          'X-API-Key-ID': c.env.GNANI_API_KEY_ID,
+        },
+        body: upstream,
+      })
+
+      // If Gnani returns 429 (rate-limited / concurrency limit), wait and retry
+      if (res.status === 429 && attempt < 2) {
+        await new Promise((resolve) => setTimeout(resolve, 800 * (attempt + 1)))
+        continue
+      }
+      break
+    } catch {
+      if (attempt === 2) {
+        return c.json(
+          { error: { code: 'upstream_unavailable', message: 'STT service unreachable' } },
+          503,
+        )
+      }
+      await new Promise((resolve) => setTimeout(resolve, 500))
+    }
   }
 
-  if (!res.ok) {
+  if (!res || !res.ok) {
     // Never forward the upstream error body — it may contain key hints or PII
     return c.json(
-      { error: { code: 'upstream_error', message: `STT returned HTTP ${res.status}` } },
+      { error: { code: 'upstream_error', message: `STT returned HTTP ${res?.status ?? 502}` } },
       502,
     )
   }

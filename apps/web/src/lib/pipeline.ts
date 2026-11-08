@@ -100,38 +100,39 @@ export function usePipeline() {
     const abort = new AbortController()
     abortRef.current = abort
 
-    // Phase: transcribing — 3 parallel STT calls
+    // Phase: transcribing — decode lanes sequentially with backoff to respect Gnani concurrency & rate limits
     setState((s) => ({
       ...s,
       phase: 'transcribing',
-      lanes: DEFAULT_LANGS.map((lang) => ({ lang, status: 'transcribing' })),
+      lanes: DEFAULT_LANGS.map((lang, i) => ({ lang, status: i === 0 ? 'transcribing' : 'waiting' })),
     }))
 
-    const laneResults = await Promise.allSettled(
-      DEFAULT_LANGS.map(async (lang, idx) => {
-        const timeoutId = setTimeout(() => abort.abort(), LANE_TIMEOUT_MS)
-        try {
-          const result = await transcribe(wavBlob, lang, abort.signal)
-          clearTimeout(timeoutId)
+    const successfulLanes: { lang: LangCode; transcript: string }[] = []
 
-          if ('error' in result) {
-            updateLane(idx, { status: 'failed', error: result.error.message })
-            return { lang, transcript: null }
-          }
+    for (const [idx, lang] of DEFAULT_LANGS.entries()) {
+      updateLane(idx, { status: 'transcribing' })
 
+      const timeoutId = setTimeout(() => abort.abort(), LANE_TIMEOUT_MS)
+      try {
+        const result = await transcribe(wavBlob, lang, abort.signal)
+        clearTimeout(timeoutId)
+
+        if ('error' in result) {
+          updateLane(idx, { status: 'failed', error: result.error.message })
+        } else {
           updateLane(idx, { status: 'done', transcript: result.transcript })
-          return { lang, transcript: result.transcript }
-        } catch {
-          clearTimeout(timeoutId)
-          updateLane(idx, { status: 'timeout', error: 'No response within 30 s. Try again.' })
-          return { lang, transcript: null }
+          successfulLanes.push({ lang, transcript: result.transcript })
         }
-      })
-    )
+      } catch {
+        clearTimeout(timeoutId)
+        updateLane(idx, { status: 'timeout', error: 'No response within 30 s. Try again.' })
+      }
 
-    const successfulLanes = laneResults
-      .map((r) => (r.status === 'fulfilled' ? r.value : null))
-      .filter((r): r is { lang: LangCode; transcript: string } => r !== null && r.transcript !== null)
+      // Brief delay between passes to guarantee Gnani free-tier rate limits are never exceeded
+      if (idx < DEFAULT_LANGS.length - 1) {
+        await new Promise((r) => setTimeout(r, 350))
+      }
+    }
 
     if (successfulLanes.length === 0) {
       setState((s) => ({ ...s, phase: 'error', errorMessage: 'All three transcription lanes failed. Check your connection and try again.' }))
