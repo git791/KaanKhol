@@ -52,10 +52,10 @@ export default function Footer() {
         <div className="p-4 rounded-xl bg-[var(--color-night-900)] border border-[var(--color-night-700)] space-y-2">
           <p className="text-[var(--color-chalk-100)] font-medium">Attributions & Open Data</p>
           <p>
-            3D: Kenney Train Kit (CC0), cosmac Low Poly Speaker (CC0). Icons: Phosphor (MIT). Fonts: Clash Display and Satoshi (ITF Free), Noto Sans Devanagari and Kannada (OFL). Data: datameet/railways (CC0). Speech: Gnani Prisma v2.5 and Timbre v2.5.
+            Icons: Phosphor (MIT). Fonts: Clash Display and Satoshi (ITF Free Font Licence), Noto Sans Devanagari and Kannada (SIL Open Font License). Data: datameet/railways (CC0). Speech: Gnani Prisma v2.5 and Timbre v2.5.
           </p>
           <p className="text-[var(--color-wave-400)]">
-            Privacy First: Audio is processed ephemerally in volatile memory. No user audio is ever committed, uploaded to third parties, or persisted.
+            Privacy First: Audio is processed ephemerally in RAM. No user audio is ever committed, uploaded to third parties, or persisted.
           </p>
         </div>
 

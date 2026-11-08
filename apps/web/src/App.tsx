@@ -155,20 +155,11 @@ function BuiltWithGnani() {
         className="p-6 rounded-2xl border"
         style={{ background: 'var(--color-night-800)', borderColor: 'var(--color-night-700)' }}
       >
-        <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-chalk-100)' }}>Team</h3>
-        <div className="space-y-3">
-          <div>
-            <p className="font-medium" style={{ color: 'var(--color-chalk-100)' }}>Bibi Sufiya Shariff</p>
-            <p className="text-sm" style={{ color: 'var(--color-steel-400)' }}>
-              Product · Speech pipeline (Prisma STT integration) · Fusion logic · Noise benchmark
-            </p>
-          </div>
-          <div>
-            <p className="font-medium" style={{ color: 'var(--color-chalk-100)' }}>Mohammed Ayaan Adil Ahmed</p>
-            <p className="text-sm" style={{ color: 'var(--color-steel-400)' }}>
-              Frontend · 3D hero · Motion · Edge API (Timbre TTS integration) · Leaderboard
-            </p>
-          </div>
+        <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--color-chalk-100)' }}>Team</h3>
+        <div className="flex flex-wrap items-center gap-3 text-base font-medium" style={{ color: 'var(--color-chalk-100)' }}>
+          <span>Bibi Sufiya Shariff</span>
+          <span style={{ color: 'var(--color-steel-400)' }}>·</span>
+          <span>Mohammed Ayaan Adil Ahmed</span>
         </div>
       </div>
     </section>
