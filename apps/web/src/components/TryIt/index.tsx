@@ -22,11 +22,13 @@ const REGIONAL_LANGUAGES: Array<{ code: LangCode; name: string; native: string; 
   { code: 'mr-IN', name: 'Marathi', native: 'मराठी', junction: 'Mumbai (CSMT)' },
   { code: 'bn-IN', name: 'Bengali', native: 'বাংলা', junction: 'Kolkata (HWH)' },
   { code: 'gu-IN', name: 'Gujarati', native: 'ગુજરાતી', junction: 'Ahmedabad (ADI)' },
+  { code: 'ml-IN', name: 'Malayalam', native: 'മലയാളം', junction: 'Thiruvananthapuram (TVC)' },
+  { code: 'pa-IN', name: 'Punjabi', native: 'ਪੰਜਾਬੀ', junction: 'Amritsar (ASR)' },
 ]
 
 const SAMPLES = [
-  { label: 'Bengaluru Platform 4 (kn-IN)', file: '/samples/sbc-platform4-kn-hi-en.wav', lang: 'kn-IN' as LangCode },
-  { label: 'Delhi Express (en-IN)', file: '/samples/ndls-rajdhani-kn-hi-en.wav', lang: 'kn-IN' as LangCode },
+  { label: 'Bengaluru Platform 4 (Kannada, Hindi, English)', file: '/samples/sbc-platform4-kn-hi-en.wav', lang: 'kn-IN' as LangCode },
+  { label: 'Delhi Express (Hindi, English, Regional)', file: '/samples/ndls-rajdhani-kn-hi-en.wav', lang: 'kn-IN' as LangCode },
 ]
 
 export default function TryIt({
@@ -79,7 +81,7 @@ export default function TryIt({
         <div className="flex items-center justify-between mb-3 text-xs font-mono">
           <span className="flex items-center gap-1.5 text-[var(--color-lamp-400)] font-bold">
             <TranslateIcon size={16} />
-            <span>Pass 1: Station Regional Language</span>
+            <span>Pass 1: Station Regional Language (8 of 11 Indic languages)</span>
           </span>
           <span className="text-[var(--color-steel-400)] hidden sm:inline">
             Pass 2: Hindi · Pass 3: English

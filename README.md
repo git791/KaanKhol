@@ -9,7 +9,7 @@
 Built for the **Gnani.ai Great Indian AI Internship Challenge** (Target: Nov 9, 2026 · Deadline: Nov 10, 2026, 11:59 PM IST).
 
 - **Primary Award Track:** **Jugaad Genius** (turning platform acoustic repetition into an error-correcting code)
-- **Supporting Tracks:** **Noise Canceller** (fact recovery under severe SNR and 8 kHz telephony), **Real Deal** (real timetable data, usable now)
+- **Supporting Track:** **Real Deal** (real timetable data, usable now across Indian junctions)
 - **Team Members:**
   - **Bibi Sufiya Shariff**
   - **Mohammed Ayaan Adil Ahmed**
