@@ -26,17 +26,18 @@ const app = new Hono<Env>()
 // ---------------------------------------------------------------------------
 // CORS — strict allow-list; never wildcard
 // ---------------------------------------------------------------------------
-const ALLOWED_ORIGINS = [
-  'https://kaankhol.pages.dev',
-  'http://localhost:5173',
-  'http://localhost:4173',
-]
+const isAllowedOrigin = (origin: string | undefined): boolean => {
+  if (!origin) return false
+  if (origin === 'https://kaankhol.pages.dev') return true
+  if (origin.endsWith('.kaankhol.pages.dev')) return true
+  if (origin === 'http://localhost:5173' || origin === 'http://localhost:4173') return true
+  return false
+}
 
 app.use(
   '/api/*',
   cors({
-    origin: (origin) =>
-      ALLOWED_ORIGINS.includes(origin ?? '') ? origin : null,
+    origin: (origin) => isAllowedOrigin(origin) ? origin : null,
     allowMethods: ['GET', 'POST', 'OPTIONS'],
     allowHeaders: ['Content-Type'],
     maxAge: 86_400,
