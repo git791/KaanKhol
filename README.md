@@ -3,6 +3,7 @@
 > "Open your ears." A trilingual Indian railway platform announcement decoder using multi-pass speech redundancy, cross-language voting, timetable ground-truth verification, and clear re-speech.
 
 [![Live Demo](https://img.shields.io/badge/Demo-kaankhol.pages.dev-3DDC97?style=for-the-badge)](https://kaankhol.pages.dev)
+[![1-Page Solution Pitch](https://img.shields.io/badge/Document-1--Page_Solution_Pitch-9B51E0?style=for-the-badge)](./PITCH.md)
 [![Edge Worker](https://img.shields.io/badge/API-Cloudflare_Worker-FFB62E?style=for-the-badge)](https://kaankhol-edge.m-ayaan-a-ahmed.workers.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-35C4D8?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
